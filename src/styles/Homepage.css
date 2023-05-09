@@ -1,0 +1,39 @@
+.container{
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    
+    flex-direction: column;
+    background-color: brown;
+    height: 950px;
+    border-radius: 30px;
+    margin-top: 20px;
+    align-items: center;
+    flex-wrap: nowrap;
+    
+}
+
+
+
+.h1{
+    position: absolute;
+    text-align: center;
+    align-self: flex-start;
+    background-color: azure;
+} 
+
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 160px;
+    padding: 35px;
+    
+}
+
+.button{
+    border-radius: 30px;
+    width: 100px;
+    border-color: aqua;
+    
+}

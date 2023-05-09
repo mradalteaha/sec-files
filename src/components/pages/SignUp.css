@@ -1,0 +1,81 @@
+
+.container{
+  background-color: rgba(0, 0, 0, 0.4)
+}
+
+h1 {
+    text-align: center;
+    color: rgb(214, 204, 245);
+    font-family: "McLaren", cursive;
+    font-weight: 200;
+    padding: 15px;
+  }
+
+  
+  input {
+    border: 1px solid rgba(252, 252, 252, 0.4);
+    background-color: rgba(33, 186, 228, 0.2);
+    width: 250px;
+    border-radius: 3px;
+    font-family: "Source Sans Pro", sans-serif;
+    padding: 10px 15px;
+    margin: 0 auto 10px auto;
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    color: rgb(14, 3, 3);
+    font-weight: 300;
+  }
+  .upload{
+    border: 1px solid rgba(252, 252, 252, 0.4);
+    background-color: rgba(33, 186, 228, 0.2);
+    width: 250px;
+    border-radius: 3px;
+    font-family: "Source Sans Pro", sans-serif;
+    padding: 10px 15px;
+    margin: 0 auto 10px auto;
+    display: block;
+    text-align: center;
+    font-size: 18px;
+    color: rgb(14, 3, 3);
+    font-weight: 300;
+  }
+  button {
+    text-align: center;
+    appearance: none;
+    outline: 0;
+    background-color: #179ee1;
+    border: 0;
+    padding: 10px 15px;
+    color: white ;
+    border-radius: 3px;
+    width: 250px;
+    font-size: 18px;
+  }
+
+  form {
+    text-align: center;
+   
+    
+  }
+  ::placeholder{
+    color: rgb(1, 247, 243);
+  }
+
+  nav{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 350px;
+  }
+  li{
+    display: inline;
+    padding-left: 0;
+  }
+
+  li:hover{
+    border-radius: 30px;
+    transform: scale(1.3);
+   
+  }

@@ -1,0 +1,59 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  html {
+    font-family: "Montserrat", sans-serif;
+  }
+  body {
+    background: #eee;
+    background-image: url("./IPFS.jpg");
+    padding: 0 16px;
+    background-repeat: no-repeat;
+    background-attachment:fixed;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    background-size:cover;
+  }
+  
+  header {
+    background-color: #179ee1;
+    opacity: 0.8;
+    margin: auto -16px;
+    padding: 16px 32px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  }
+  
+  header h1 {
+    color: #fff;
+    font-family: "McLaren", cursive;
+    font-weight: 200;
+    display: inline;
+  }
+  header button {
+    color: rgb(223, 8, 8);
+    font-family: "McLaren", cursive;
+    font-weight: 200;
+    display: inline;
+    position:relative;
+    margin-left: 60%;
+  
+  }
+  
+  footer {
+    position: absolute;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+    height: 2.5rem;
+  }
+  
+  footer p {
+    color: #ccc;
+  }
+  
+  
