@@ -1,10 +1,14 @@
 import React from 'react'
 import './SignUp.css'
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {ref, uploadBytes} from 'firebase/storage'
+import * as Name from 'w3name';
+import {storage} from '../../firebase'
+import { useNavigate } from "react-router-dom";
 
 
 function SignUp(props){
-    
+    const navigate = useNavigate()
     async function handleClick(event){ //getting the element out of the form 
         try{
             event.preventDefault();
@@ -15,13 +19,40 @@ function SignUp(props){
                 ,password:document.getElementById("password").value
             }
 
+            
 
             const auth = getAuth();
             if(Account.email !=='' && Account.password !=='' && Account.username !=='' && Account.fullName !==''){
+               const userData={
+                displayName:Account.fullName,
+                username:Account.username
+               }
                 createUserWithEmailAndPassword(auth, Account.email, Account.password)
-                .then((userCredential) => {
+                .then(async (userCredential) => {
                     // Signed in 
                     const user = userCredential.user;
+                    const userStorageRef = ref(storage, `Keys/${user.uid}/keys`);
+
+
+                  updateProfile(user,userData).then(async (res)=>{//updating user profile data
+                    Name.create().then(async name =>{
+                        console.log('name has been created')
+                       const nameBytes =  name.key.bytes
+
+                        uploadBytes(userStorageRef, nameBytes).then(res =>{
+                            alert('user keys saved')
+                            navigate('/')
+
+                        }); 
+                    
+
+                    }).catch(err=>{
+                        console.log('error on creating name ')
+                        alert('error on creating name ')
+                    });
+                  }).catch(err =>{
+                    alert(err)
+                  })
                     // ...
                 })
                 .catch((error) => {
