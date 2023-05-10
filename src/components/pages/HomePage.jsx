@@ -37,6 +37,7 @@ export default function HomePage(props){
         }
       }catch(err){
         setLoading(false)
+        
 
         console.log(err)
       }
