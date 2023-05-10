@@ -1,16 +1,16 @@
-import React ,{useState} from 'react'
+import React ,{useContext, useEffect, useState} from 'react'
 import { Web3Storage } from 'web3.storage'
 import { Input } from '@mui/material';
-
-
 import '../../styles/Homepage.css'
-
+import GlobalContext from '../../context/Context';
+import * as Namelib from 'w3name'
 
 export default function HomePage(props){
     const [selectedFile, setSelectedFile] = useState(null);
+    const [loading , setLoading]=useState(false)
+    const {currentUser ,Name} = useContext(GlobalContext)
 
-
-
+  useEffect(()=>{},[currentUser])
 
     const handleFileChange = (event) => {
       setSelectedFile(event.target.files);
@@ -24,10 +24,20 @@ export default function HomePage(props){
        // const blob = new Blob([file], { type: file.type });
         const results = await storeWithProgress(files)
         if(results){
+          
           console.log('result of uploaded file')
           console.log(results)
+          const value = `/ipfs/${results}`;
+          const revision = await Namelib.v0(Name, value);
+          Namelib.publish(revision, Name.key).then(()=>
+          {
+            alert('name published')
+            setLoading(false)
+          });
         }
       }catch(err){
+        setLoading(false)
+
         console.log(err)
       }
       
@@ -35,6 +45,7 @@ export default function HomePage(props){
 
 
       async function storeWithProgress (files) {
+        setLoading(true)
         console.log('print the files')
         console.log(files)
         // show the root cid as soon as it's ready
@@ -60,6 +71,17 @@ export default function HomePage(props){
         return client.put(files,{onStoredChunk,onRootCidReady ,name:files[0].name})
       }
 
+      if(!currentUser){
+        return (<div  className='container'>
+          <h1> You are unauthorized to get into this page</h1>
+        </div>)
+      }
+
+      if(loading){
+        return <div  className='container'>
+        <h1> Uploading File ...</h1>
+      </div>
+      }
 
     return (<div className='container'>
 
@@ -86,7 +108,7 @@ return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDcxMEE3QzR
   // environement variable or other configuration that's kept outside of
   // your code base. For this to work, you need to set the
   // WEB3STORAGE_TOKEN environment variable before you run your code.
-  return process.env.WEB3STORAGE_TOKEN
+  //return process.env.WEB3STORAGE_TOKEN
 }
 
 function makeStorageClient () {

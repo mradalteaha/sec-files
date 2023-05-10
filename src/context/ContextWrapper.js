@@ -4,15 +4,14 @@ import Context from "./Context";
 export default function ContextWrapper(props) {
 
   const [currentUser, setCurrentUser] = useState(null);
-  const [quizzAnswers, setQuizzAnswers] = useState(new Map());
-  const [adminLog, setAdminLog] = useState(false);
+  const [Name, setName] = useState(null);
  
 
  
 
   return (
     <Context.Provider
-      value={{ currentUser,setCurrentUser,quizzAnswers, setQuizzAnswers,adminLog, setAdminLog}}
+      value={{ currentUser,setCurrentUser,Name,setName}}
     >
       {props.children}
     </Context.Provider>

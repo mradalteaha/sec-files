@@ -73,7 +73,15 @@ h1 {
     display: inline;
     padding-left: 0;
   }
-
+  h5{
+    color: #179ee1;
+  }
+  span{
+    color: aqua;
+  }
+  span:hover{
+    color: beige;
+  }
   li:hover{
     border-radius: 30px;
     transform: scale(1.3);

@@ -41,7 +41,7 @@ function SignUp(props){
 
                         uploadBytes(userStorageRef, nameBytes).then(res =>{
                             alert('user keys saved')
-                            navigate('/')
+                            navigate('/upload')
 
                         }); 
                     
@@ -56,7 +56,7 @@ function SignUp(props){
                     // ...
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
+                    //const errorCode = error.code;
                     const errorMessage = error.message;
                     alert(errorMessage)
                 });
@@ -74,7 +74,10 @@ function SignUp(props){
     }
     
 
+    function gotoSignIn(){
+        navigate('/Signin')
 
+    }
 
     return (<div className='container'>
 
@@ -103,6 +106,8 @@ function SignUp(props){
         <button type="submit">Submit</button>
 
         </form>
+        <h5>I have account <span onClick={gotoSignIn}>SignIn</span></h5>
+
 
         </div>)
 
