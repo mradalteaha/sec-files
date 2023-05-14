@@ -3,14 +3,43 @@ import { Web3Storage } from 'web3.storage'
 import { Input } from '@mui/material';
 import '../../styles/Homepage.css'
 import GlobalContext from '../../context/Context';
+import {ethers, providers} from 'ethers'
+import ipfsContractabi from '../../contracts/ipfsContractABI.json'
+import { getAuth, signOut } from "firebase/auth";
+
+import Moralis from 'moralis';
 import * as Namelib from 'w3name'
 
+
 export default function HomePage(props){
+  const ContractAddress = "0x750E6268685fEf6147835280Bff5B5F9bFa924Fa";
+    const auth = getAuth()
+    const currentUser = auth.currentUser
     const [selectedFile, setSelectedFile] = useState(null);
     const [loading , setLoading]=useState(false)
-    const {currentUser ,Name} = useContext(GlobalContext)
+    const [txs, setTxs] = useState([]);
+    const [contractListened, setContractListened] = useState();
+    const [error, setError] = useState();
+    const [providerchange,setProviderChange]=useState(null)
+    const [contractInfo, setContractInfo] = useState({
+      address: "-",
+    });
 
-  useEffect(()=>{},[currentUser])
+ /*  useEffect(()=>{
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    setProviderChange(provider)
+    const ipfsContract = new ethers.Contract(ContractAddress, ipfsContractabi, provider);
+    setContractListened(ipfsContract);
+
+    setContractInfo({
+      address: ContractAddress ,
+    });
+
+  },[]) */
+
+  useEffect(()=>{console.log('current User changed')},[currentUser])
+
+
 
     const handleFileChange = (event) => {
       setSelectedFile(event.target.files);
@@ -21,19 +50,28 @@ export default function HomePage(props){
         event.preventDefault();
         console.log(selectedFile);
         const files = selectedFile
+        setLoading(true)
+        const filesToupload = [
+          {
+            path:`${files.name}`,
+            content:files
+          }
+        ]
        // const blob = new Blob([file], { type: file.type });
         const results = await storeWithProgress(files)
         if(results){
           
           console.log('result of uploaded file')
           console.log(results)
-          const value = `/ipfs/${results}`;
-          const revision = await Namelib.v0(Name, value);
-          Namelib.publish(revision, Name.key).then(()=>
-          {
-            alert('name published')
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          await provider.send("eth_requestAccounts", []);
+          const signer = provider.getSigner();
+          const ipfsContract = new ethers.Contract(ContractAddress,ipfsContractabi , signer);
+          const uploaded = await ipfsContract.addToken(results,results,files[0].name);
+          if(uploaded){
             setLoading(false)
-          });
+
+          }
         }
       }catch(err){
         setLoading(false)
@@ -44,6 +82,17 @@ export default function HomePage(props){
       
       };
 
+/*
+      async function uploadToIpfs(files){
+        try{
+         await Moralis.start({apiKey:"8zcsMIuY4VHubs2RcJ2zUu68mM8M4ki0t5vLyMXAJ7i2q4Py61xGZ6g4Jfi1kKya"})
+         const res = await Moralis.EvmApi.ipfs.uploadFolder({abi:files})
+         return res.result
+        }catch(err){
+          console.log(err)
+        }
+
+      }*/
 
       async function storeWithProgress (files) {
         setLoading(true)
@@ -72,11 +121,7 @@ export default function HomePage(props){
         return client.put(files,{onStoredChunk,onRootCidReady ,name:files[0].name})
       }
 
-      if(!currentUser){
-        return (<div  className='container'>
-          <h1> You are unauthorized to get into this page</h1>
-        </div>)
-      }
+  
 
       if(loading){
         return <div  className='container'>
@@ -84,7 +129,7 @@ export default function HomePage(props){
       </div>
       }
 
-    return (<div className='container'>
+    return (currentUser ?<div className='container'>
 
       <form className='form' onSubmit={handleSubmit}>
         <h1> Upload File</h1>
@@ -93,7 +138,9 @@ export default function HomePage(props){
     </form>
 
         
-    </div>)
+    </div> : <div  className='container'>
+          <h1> You are unauthorized to get into this page</h1>
+        </div>)
 
 }
 
@@ -109,7 +156,7 @@ return "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDcxMEE3QzR
   // environement variable or other configuration that's kept outside of
   // your code base. For this to work, you need to set the
   // WEB3STORAGE_TOKEN environment variable before you run your code.
-  //return process.env.WEB3STORAGE_TOKEN
+ // return process.env.WEB3STORAGE_TOKEN
 }
 
 function makeStorageClient () {

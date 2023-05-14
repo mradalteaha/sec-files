@@ -1,12 +1,15 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 
 import GlobalContext from "../../context/Context";
 
 
 function Heading(props){
 
-    const {currentUser} =useContext(GlobalContext)
+    const { setCurrentUser} =useContext(GlobalContext)
+    const auth = getAuth()
+    const currentUser = auth.currentUser
 
     const navigate = useNavigate()
     function gotoSignUp(){
@@ -24,7 +27,21 @@ function Heading(props){
 
     }
     function gotoViewFiles(){
+        navigate('/viewfiles')
+
+    }
+
+    async function logout(){
         //navigate('/viewfiles')
+        const auth = getAuth();
+        signOut(auth).then(() => {
+            setCurrentUser(null)
+            navigate('/Signin')
+        }).catch((error) => {
+            console.log(error)
+        });
+        
+
 
     }
 
@@ -51,6 +68,11 @@ function Heading(props){
         
     </li>
     </nav>
+
+    <li style={{display:currentUser?'inline':'none'}} >
+    <label onClick={logout} style={{display:'inline'}} >Sign Out</label>
+
+    </li>
 
     </header>)
 }
